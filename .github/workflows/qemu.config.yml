@@ -33,7 +33,7 @@ jobs:
         run: |
           cd buildroot
           sudo apt install bc rsync
-          make -j5
+          make oldconfig -j5
       - name: Put the iso back to repo
         run: |
           mv buildroot/output/images/rootfs.iso9660 .config/qemu.config/qemu.buildroot.iso
