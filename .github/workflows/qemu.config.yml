@@ -33,6 +33,7 @@ jobs:
       - name: Copy file from this repo to buildroot
         run: |
           cp .config/qemu.config/qemu.config buildroot/qemu.config
+          mkdir /tmp/buildroot
           cp .config/qemu.config/logo.png /tmp/buildroot/logo.png
           cd buildroot
           mv qemu.config .config
