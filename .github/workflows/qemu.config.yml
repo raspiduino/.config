@@ -29,7 +29,8 @@ jobs:
         run: git clone https://raspiduino:${{ secrets.MY_ACCESS_TOKEN }}@github.com/raspiduino/.config
       - name: Copy file from this repo to buildroot
         run: |
-          cp .config/qemu.config/** buildroot
+          cp .config/qemu.config/qemu.config buildroot/qemu.config
+          cp .config/qemu.config/logo.png /tmp/buildroot/logo.png
           cd buildroot
           mv qemu.config .config
       - name: Build
