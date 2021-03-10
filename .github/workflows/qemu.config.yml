@@ -20,7 +20,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  Build the Buildroot:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -43,13 +43,30 @@ jobs:
           sudo apt install bc rsync
           make oldconfig
           make -j5
-      - name: Put the iso back to repo
+      - name: Rename the ISO file
         run: |
-          mv buildroot/output/images/rootfs.iso9660 .config/qemu.config/qemu.buildroot.iso
-          cd .config
-          git remote set-url origin https://raspiduino:${{ secrets.MY_ACCESS_TOKEN }}@github.com/raspiduino/.config
-          git config --global user.email "raspiduinogit@gmail.com"
-          git config --global user.name "Raspiduino"
-          git add .
-          git commit -m "Upload the iso"
-          git push -f origin main
+          cd buildroot/output/images
+          mv rootfs.iso9660 QEMU-buildroot.iso
+      - name: Create a new release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+          body: |
+            Prebuilt ISO file from Github Action
+            You can download it below.
+      - name: Upload the ISO file
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: buildroot/output/images/QEMU-buildroot.iso
+          asset_name: QEMU-buildroot.iso
+          asset_content_type: application/octet-stream # There is no type for ISO file, so we must use this
