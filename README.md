@@ -8,7 +8,8 @@ make oldconfig
 ```
 Then you can use ```make menuconfig``` to edit the config to fit your setting or just ```make``` to build the image.
 The default output is an ***.iso*** file at ```[YOUR_BUILDROOT_DIR]/output/images/rootfs.iso9660```
+<br>Alternatively, you can download the pre-built iso (<b><i>Unstable</i></b>) at <a href="https://github.com/raspiduino/.config/releases">Release</a>
 ## What is this repo include?
 |Name|Description|
 |----|-----------|
-|qemu.config|Buildroot with qemu-i386 only|
+|<a href="https://github.com/raspiduino/.config/tree/main/qemu.config">qemu.config</a>|Buildroot with qemu-i386 only|
