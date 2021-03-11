@@ -43,7 +43,9 @@ jobs:
           mv rootfs.iso9660 QEMU-buildroot.iso
       - name: Get the commit sha
         id: get_sha
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: |
+          cd .config
+          echo "::set-output name=sha_short::$(git rev-parse --short 7)"
       - name: Create a new release
         id: create_release
         uses: actions/create-release@v1
