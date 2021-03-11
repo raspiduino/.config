@@ -8,11 +8,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'qemu.config/**'
+      - 'qemu.config/qemu.config'
   pull_request:
     branches: [ main ]
     paths:
-      - 'qemu.config/**'
+      - 'qemu.config/qemu.config'
     
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,18 +31,12 @@ jobs:
       - name: Clone this repo
         run: git clone https://raspiduino:${{ secrets.MY_ACCESS_TOKEN }}@github.com/raspiduino/.config
       - name: Copy file from this repo to buildroot
-        run: |
-          cp .config/qemu.config/qemu.config buildroot/qemu.config
-          mkdir /tmp/buildroot
-          cp .config/qemu.config/logo.png /tmp/buildroot/logo.png
-          cd buildroot
-          mv qemu.config .config
+        run: cp .config/qemu.config/qemu.config buildroot/.config
       - name: Build
         run: |
           cd buildroot
-          sudo apt install bc rsync
           make oldconfig
-          make -j5
+          make -j2
       - name: Rename the ISO file
         run: |
           cd buildroot/output/images
